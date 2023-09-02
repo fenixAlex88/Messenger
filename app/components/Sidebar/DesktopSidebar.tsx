@@ -1,4 +1,4 @@
-'use client';
+"use client";
 
 import useRoutes from "@/app/hooks/useRoutes";
 import { useState } from "react";
@@ -10,15 +10,13 @@ interface DesktopSidebarProps {
     currentUser: User;
 }
 
-export const DesktopSidebar: React.FC<DesktopSidebarProps> = ({currentUser}) => {
+export const DesktopSidebar: React.FC<DesktopSidebarProps> = ({ currentUser }) => {
     const routes = useRoutes();
     const [isOpen, setIsOpen] = useState(false);
 
-    console.log({ currentUser });
-
-
     return (
-        <div className="
+        <div
+            className="
                 hidden
                 lg:fixed
                 lg:inset-y-0
@@ -33,13 +31,16 @@ export const DesktopSidebar: React.FC<DesktopSidebarProps> = ({currentUser}) => 
                 lg:flex
                 lg:flex-col
                 justify-between
-            ">
-            <nav className="
+            "
+        >
+            <nav
+                className="
                 mt-4
                 flex
                 flex-col
                 justify-between
-            ">
+            "
+            >
                 <ul
                     role="list"
                     className="
@@ -50,21 +51,19 @@ export const DesktopSidebar: React.FC<DesktopSidebarProps> = ({currentUser}) => 
                     "
                 >
                     {routes.map((item) => (
-                        <DesktopItem
-                            key={item.label}
-                            {...item}
-                        />
+                        <DesktopItem key={item.label} {...item} />
                     ))}
                 </ul>
-
             </nav>
-            <nav className="
+            <nav
+                className="
                 mt-4
                 flex
                 flex-col
                 justify-between
                 items-center
-            ">
+            "
+            >
                 <div
                     onClick={() => setIsOpen(true)}
                     className="
@@ -73,9 +72,9 @@ export const DesktopSidebar: React.FC<DesktopSidebarProps> = ({currentUser}) => 
                         transition
                     "
                 >
-                    <Avatar user={currentUser}/>
+                    <Avatar user={currentUser} />
                 </div>
             </nav>
         </div>
-    )
+    );
 };
