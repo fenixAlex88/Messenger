@@ -1,6 +1,7 @@
 import { NextResponse } from "next/server";
 import getCurrentUser from "../../../../actions/getCurrentUser";
 import prisma from "@/app/libs/prismadb";
+import { pusherServer } from "@/app/libs/pusher";
 
 interface IParams {
     conversationId: string;
@@ -31,25 +32,37 @@ export async function POST(request: Request, { params }: { params: IParams }) {
 
         const lastMessage = conversation.messages[conversation.messages.length - 1];
 
-		if (!lastMessage) return NextResponse.json(conversation);
+        if (!lastMessage) return NextResponse.json(conversation);
 
-		const updatedMessage = await prisma.message.update({
-			where: {
-				id: lastMessage.id
-			},
-			include: {
-				sender: true,
-				seen: true
-			},
-			data: {
-				seen: {
-					connect:{
-						id: currentUser.id
-				}}
-			}
-		})
+        const updatedMessages = await prisma.message.update({
+            where: {
+                id: lastMessage.id,
+            },
+            include: {
+                sender: true,
+                seen: true,
+            },
+            data: {
+                seen: {
+                    connect: {
+                        id: currentUser.id,
+                    },
+                },
+            },
+        });
 
-		return NextResponse.json(updatedMessage);
+        await pusherServer.trigger(currentUser.email!, "conversation:update", {
+            id: conversationId,
+            messages: [updatedMessages],
+        });
+
+        if (lastMessage.seenIds.indexOf(currentUser.id) !== -1) {
+            return NextResponse.json(conversation);
+        }
+
+        await pusherServer.trigger(conversationId!, "message:update", updatedMessages);
+
+        return NextResponse.json(updatedMessages);
     } catch (error) {
         console.log(error, "ERROR_MESSAGES_SEEN");
         return new NextResponse("Internal Error", { status: 500 });
