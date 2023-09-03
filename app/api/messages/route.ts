@@ -60,7 +60,8 @@ export async function POST(request: Request) {
             },
         });
 
-        return NextResponse.json(newMessage);
+		return NextResponse.json(newMessage);
+
     } catch (error) {
         console.error(error, "ERROR_MESSAGES");
         return new NextResponse("Internal Erorr", { status: 500 });

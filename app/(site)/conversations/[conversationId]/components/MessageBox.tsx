@@ -6,6 +6,8 @@ import clsx from "clsx";
 import { format } from "date-fns";
 import { useSession } from "next-auth/react";
 import Image from "next/image";
+import { useState } from "react";
+import ImageModal from './ImageModal';
 
 interface MessageBoxProps {
     isLast?: boolean;
@@ -14,6 +16,7 @@ interface MessageBoxProps {
 
 const MessageBox: React.FC<MessageBoxProps> = ({ isLast, data }) => {
     const session = useSession();
+    const [imageModalOpen, setImageModalOpen] = useState<boolean>(false);
     const isOwn = session.data?.user?.email === data?.sender?.email;
     const seenList = (data.seen || [])
         .filter((user) => user.email !== data?.sender?.email)
@@ -45,29 +48,37 @@ const MessageBox: React.FC<MessageBoxProps> = ({ isLast, data }) => {
                     </div>
                 </div>
                 <div className={message}>
+                    <ImageModal
+                        src={data.image}
+                        isOpen={imageModalOpen}
+                        onClose={() => setImageModalOpen(false)}
+                    />
                     {data.image ? (
                         <Image
+                            onClick={() => setImageModalOpen(true)}
                             alt="Image"
                             height={288}
                             width={288}
                             src={data.image}
                             className="w-full
-							object-cover
-							cursor-pointer
-							hover:scale-110
-							transition
-						"
+                                    object-cover
+                                    cursor-pointer
+                                    hover:scale-110
+                                    transition
+                                "
                         />
                     ) : (
                         <>{data.body}</>
                     )}
                 </div>
                 {isLast && isOwn && seenList.length > 0 && (
-                    <div className='
+                    <div
+                        className="
                         text-xs
                         font-light
                         text-gray-500
-                    '>
+                    "
+                    >
                         {`Seen by ${seenList}`}
                     </div>
                 )}
