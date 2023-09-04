@@ -4,9 +4,20 @@ import { EmptyState } from "@/app/components";
 import Header from './components/Header';
 import Body from './components/Body';
 import Form from './components/Form';
+import { Metadata } from 'next';
+import useOtherUser from '@/app/hooks/useOtherUser';
 
 interface IParams {
     conversationId: string;
+}
+
+export async function generateMetadata({ params }: { params: IParams }) {
+    const conversation = await getConversationById(params.conversationId);
+    // eslint-disable-next-line react-hooks/rules-of-hooks
+    const otherUser = useOtherUser(conversation!);
+    return {
+        title: otherUser.name,
+    };
 }
 
 const ConversationId = async ({ params }: { params: IParams }) => {
