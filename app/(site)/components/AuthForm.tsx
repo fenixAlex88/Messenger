@@ -103,7 +103,7 @@ const AuthForm = () => {
                         <Input id='name' label="Name" register={register} errors={errors} disabled={isLoading} />
                     )}
                     <Input id='email' label="Email address" type="email" register={register} errors={errors} disabled={isLoading} />
-                    <Input id='password' label="Passwprd" type="password" register={register} errors={errors} disabled={isLoading} />
+                    <Input id='password' label="Password" type="password" register={register} errors={errors} disabled={isLoading} />
                     <div>
                         <Button
                             disabled={isLoading}
