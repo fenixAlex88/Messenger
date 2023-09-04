@@ -12,11 +12,8 @@ interface IParams {
 }
 
 export async function generateMetadata({ params }: { params: IParams }) {
-    const conversation = await getConversationById(params.conversationId);
-    // eslint-disable-next-line react-hooks/rules-of-hooks
-    const otherUser = useOtherUser(conversation!);
     return {
-        title: otherUser.name,
+        title: params.conversationId,
     };
 }
 
