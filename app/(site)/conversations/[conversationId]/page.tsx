@@ -5,13 +5,12 @@ import Header from './components/Header';
 import Body from './components/Body';
 import Form from './components/Form';
 import { Metadata } from 'next';
-import useOtherUser from '@/app/hooks/useOtherUser';
 
 interface IParams {
     conversationId: string;
 }
 
-export async function generateMetadata({ params }: { params: IParams }) {
+export async function generateMetadata({ params }: { params: IParams }): Promise<Metadata> {
     return {
         title: params.conversationId,
     };
