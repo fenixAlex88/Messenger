@@ -6,9 +6,13 @@ export const pusherServer = new PusherServer({
     key: process.env.NEXT_PUBLIC_PUSHER_KEY!,
     secret: process.env.NEXT_PUBLIC_PUSHER_SECRET!,
     cluster: "eu",
-	useTLS: true
+    useTLS: true
 });
 
 export const pusherClient = new PusherClient(process.env.NEXT_PUBLIC_PUSHER_KEY!, {
+    channelAuthorization: {
+        endpoint: '/api/pusher/auth',
+        transport: 'ajax',
+    },
     cluster: "eu",
 });
